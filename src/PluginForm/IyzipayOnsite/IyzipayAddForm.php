@@ -203,7 +203,7 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
    */
   protected function validateCreditCardForm(array &$element, FormStateInterface $form_state) {
     $values = $form_state->getValue($element['#parents']);
-    $values['number'] = str_replace(" ","",$values['number']);
+    $values['number'] = str_replace(" ", "", $values['number']);
     $card_type = CreditCard::detectType($values['number']);
     if (!$card_type) {
       $form_state->setError($element['number'], $this->t('You have entered a credit card number of an unsupported card type.'));
@@ -215,7 +215,7 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
     $payment_gateway = $this->entity->getPaymentGateway();
     $payment_gateway_config = $payment_gateway->getPluginConfiguration();
     $accepted_card_types = array(
-      "amex", "mastercard", "visa", "troy", "visa electron"
+      "amex", "mastercard", "visa", "troy", "visa electron",
     );
 
     if ($accepted_card_types && !in_array($card_type->getId(), $accepted_card_types)) {
@@ -233,7 +233,7 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
       $form_state->setError($element['number'], $this->t('You have entered an invalid credit card number.'));
     }
 
-    if (!CreditCard::validateExpirationDate($values['expiration']['month'], '20'.$values['expiration']['year'])) {
+    if (!CreditCard::validateExpirationDate($values['expiration']['month'], '20' . $values['expiration']['year'])) {
       $form_state->setError($element['expiration'], $this->t('You have entered an expired credit card.'));
     }
     if (!CreditCard::validateSecurityCode($values['security_code'], $card_type)) {
