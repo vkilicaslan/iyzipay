@@ -11,8 +11,8 @@
           if ($('input#edit-payment-information-add-payment-method-payment-details-number').length) {
             Drupal.behaviors.iyzipayFancyCard.setupCard();
           }
-		  else {
-            setTimeout(Drupal.behaviors.iyzipayFancyCard.setupCard(), 1000);
+          else {
+            setTimeout('Drupal.behaviors.iyzipayFancyCard.setupCard();',1000);
           }
         });
       });
@@ -23,7 +23,7 @@
       }
 
       $('.credit-card-form').prepend("<div class='fancy_card_wrapper'></div>");
-      new Card({
+      var card = new Card({
         // a selector or DOM element for the form where users will
         // be entering their information
         form: '.credit-card-form', // *required*
