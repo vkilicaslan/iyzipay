@@ -23,7 +23,7 @@
       }
 
       $('.credit-card-form').prepend("<div class='fancy_card_wrapper'></div>");
-      new Card({
+      var card = new Card({
         // a selector or DOM element for the form where users will
         // be entering their information
         form: '.credit-card-form', // *required*
