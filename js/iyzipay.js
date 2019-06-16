@@ -11,8 +11,8 @@
           if ($('input#edit-payment-information-add-payment-method-payment-details-number').length) {
             Drupal.behaviors.iyzipayFancyCard.setupCard();
           }
-		  else {
-            setTimeout(Drupal.behaviors.iyzipayFancyCard.setupCard(), 1000);
+          else {
+            setTimeout('Drupal.behaviors.iyzipayFancyCard.setupCard();', 1000);
           }
         });
       });
