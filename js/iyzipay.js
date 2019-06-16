@@ -1,28 +1,29 @@
 (function ($, Drupal, drupalSettings) {
-  'use strict'
+  'use strict';
   Drupal.behaviors.iyzipayFancyCard = {
     attach: function (context, settings) {
       $(document).ready(function () {
         if ($('input#edit-payment-information-add-payment-method-payment-details-number').length) {
-          Drupal.behaviors.iyzipayFancyCard.setupCard()
+          Drupal.behaviors.iyzipayFancyCard.setupCard();
         }
 
         $('.payment-method--new').one('click', function () {
           if ($('input#edit-payment-information-add-payment-method-payment-details-number').length) {
-            Drupal.behaviors.iyzipayFancyCard.setupCard()
-          } else {
-            setTimeout(Drupal.behaviors.iyzipayFancyCard.setupCard(), 1000)
+            Drupal.behaviors.iyzipayFancyCard.setupCard();
           }
-        })
-      })
+		  else {
+            setTimeout(Drupal.behaviors.iyzipayFancyCard.setupCard(), 1000);
+          }
+        });
+      });
     },
     setupCard: function () {
       if ($('.fancy_card_wrapper').length) {
-        return
+        return;
       }
 
-      $('.credit-card-form').prepend("<div class='fancy_card_wrapper'></div>")
-      var card = new Card({
+      $('.credit-card-form').prepend("<div class='fancy_card_wrapper'></div>");
+      new Card({
         // a selector or DOM element for the form where users will
         // be entering their information
         form: '.credit-card-form', // *required*
@@ -60,24 +61,24 @@
 
         // if true, will log helpful messages for setting up Card
         debug: false // optional - default false
-      })
+      });
 
-      $('.form-item-payment-information-add-payment-method-billing-information-address-0-address-country-code').before("<div class='billing_info'><h3>Billing information</h3></div>")
+      $('.form-item-payment-information-add-payment-method-billing-information-address-0-address-country-code').before("<div class='billing_info'><h3>Billing information</h3></div>");
 
       $('form').find('input[type=text]').each(function (ev) {
         if (!$(this).val()) {
-          $(this).parent().find('label').hide()
-          $(this).attr('placeholder', $(this).parent().find('label').text())
+          $(this).parent().find('label').hide();
+          $(this).attr('placeholder', $(this).parent().find('label').text());
         }
-      })
+      });
 
-      $('.credit-card-form').append("<div class='clear_both'></div>")
+      $('.credit-card-form').append("<div class='clear_both'></div>");
 
       $('#commerce-checkout-flow-multistep-default').submit(function () {
         // lets correct the credit card format
-        var str = $('#edit-payment-information-add-payment-method-payment-details-number').val().replace(/\s/g, '')
-        $('#edit-payment-information-add-payment-method-payment-details-number').val(str)
-      })
+        var str = $('#edit-payment-information-add-payment-method-payment-details-number').val().replace(/\s/g, '');
+        $('#edit-payment-information-add-payment-method-payment-details-number').val(str);
+      });
     }
-  }
-})(jQuery, Drupal, drupalSettings)
+  };
+})(jQuery, Drupal, drupalSettings);

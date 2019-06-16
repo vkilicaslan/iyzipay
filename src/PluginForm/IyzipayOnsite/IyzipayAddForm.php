@@ -132,10 +132,6 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
    *   The built credit card form.
    */
   protected function buildCreditCardForm(array $element, FormStateInterface $form_state) {
-    // Get whether expiration and cvv are required from the payment gateway's
-    // configuration.
-    $payment_gateway = $this->entity->getPaymentGateway();
-
     $element['#attributes']['class'][] = 'credit-card-form';
     // Placeholder for the detected card type. Set by validateCreditCardForm().
     $element['#attached']['library'][] = 'iyzipay/card';
@@ -211,7 +207,6 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
 
     // Validate that the card type is one of the accepted by the payment
     // gateway.
-    $payment_gateway = $this->entity->getPaymentGateway();
     $accepted_card_types = [
       "amex", "mastercard", "visa", "troy", "visa electron",
     ];
