@@ -259,7 +259,7 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
     $request->setBillingAddress($billingAddress);
     $request->setShippingAddress($billingAddress);
 
-    $basketItems = array();
+    $basketItems = [];
 
     foreach ($order->getItems() as $order_item) {
       $product_variation = $order_item->getPurchasedEntity();
