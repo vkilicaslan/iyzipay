@@ -1,0 +1,41 @@
+.jp-card-container {
+  float: right;
+}
+
+.credit-card-form {
+  border: 5px solid #8cb7d0;
+/*  height: 250px;*/
+  padding: 20px;
+  margin: 0 0 50px 0;
+  border-radius: 20px;
+  background-color: #b0e2ff;
+}
+
+.credit-card-form input {
+  border: 3px solid #8cb7d0 !important;
+}
+
+.credit-card-form .form-item-payment-information-add-payment-method-payment-details-expiration-month,
+.credit-card-form .form-item-payment-information-add-payment-method-payment-details-expiration-year,
+.credit-card-form .form-item-payment-information-add-payment-method-payment-details-security-code {
+  width: 90px !important;
+}
+
+.credit-card-form .form-item-payment-information-add-payment-method-payment-details-holder-name,
+.credit-card-form .form-item-payment-information-add-payment-method-payment-details-number {
+  width: 300px !important;
+}
+
+#edit-payment-information-add-payment-method-billing-information select {
+  height: 40px;
+}
+
+.clear_both {
+  clear: both;
+}
+
+#edit-payment-information-add-payment-method-billing-information input:required,
+#edit-payment-information-add-payment-method-billing-information select:required {
+  padding-right: 25px;
+  background: url(../assets/img/asterix.png) right center no-repeat;
+}

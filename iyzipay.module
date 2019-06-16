@@ -1,0 +1,67 @@
+<?php
+
+/**
+ * @file
+ * Contains iyzipay.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_help().
+ */
+function iyzipay_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the iyzipay module.
+    case 'help.page.iyzipay':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Iyzico iyzipay credit card payment module for drupal commerce') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function iyzipay_theme() {
+  return [
+    'iyzipay' => [
+      'render element' => 'children',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ *
+ * Encrypt credit card details before saving them to the database, for the
+ * encrypted credit card payment method.
+ */
+function iyzipay_commerce_payment_method_presave(EntityInterface $entity) {
+  if ($entity->bundle() !== 'full_credit_card') {
+    return;
+  }
+
+  $encryption_service = \Drupal::service('encryption');
+
+  // Encrypt all CC fields.
+  $fields = [
+    'encrypted_full_holder_name',
+    'encrypted_full_card_type',
+    'encrypted_full_card_number',
+    'encrypted_full_card_exp_month',
+    'encrypted_full_card_exp_year',
+    'encrypted_full_card_cvv',
+  ];
+
+  foreach ($fields as $field) {
+    $entity->set(
+      $field,
+      $encryption_service->encrypt($entity->{$field}->value)
+    );
+  }
+}

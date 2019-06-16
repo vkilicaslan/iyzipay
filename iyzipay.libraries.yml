@@ -1,0 +1,23 @@
+iyzipay:
+  version: 1.x
+  css:
+    theme:
+      # css/card.css: {}
+      css/iyzipay.css: {}
+  js:
+    # js/card.js: {}
+    js/iyzipay.js: {}
+  dependencies:
+    - core/jquery
+
+card:
+  remote: https://github.com/jessepollak/card
+  version: "2.4.0"
+  license:
+    name: Copyright (c) 2014 Jesse Pollak
+    url: https://github.com/jessepollak/card/blob/master/LICENSE
+    gpl-compatible: true
+  css:
+    "https://rawgit.com/jessepollak/card/master/dist/card.css": { minified: true }
+  js:
+    "https://rawgit.com/jessepollak/card/master/dist/card.js": { minified: true }

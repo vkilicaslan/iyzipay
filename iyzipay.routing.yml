@@ -1,0 +1,8 @@
+iyzipay.3d_landing_page:
+  path: 'iyzipay/3d_landing_page'
+  defaults:
+    _controller: '\Drupal\iyzipay\Controller\RedirectController::getStatus'
+  options:
+    no_cache: TRUE
+  requirements:
+    _access: 'TRUE'

@@ -1,0 +1,16 @@
+{
+  "name": "drupal/iyzipay",
+  "type": "drupal-module",
+  "description": "Iyzico iyzipay credit card payment gateway module for drupal commerce",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/iyzipay",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/iyzipay",
+    "source": "http://cgit.drupalcode.org/iyzipay"
+  },
+  "require": {
+    "iyzico/iyzipay-php": "^2.0"
+  }
+}

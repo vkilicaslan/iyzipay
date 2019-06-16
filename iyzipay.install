@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions for Iyzipay.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function iyzipay_requirements($phase) {
+  $requirements = [];
+  if ($phase == 'install') {
+    if (!class_exists('\Iyzipay\Request')) {
+      $requirements['iyzipay_library'] = [
+        'description' => t('Iyzipay requires the iyzico/iyzipay-php library. You can find it here https://github.com/iyzico/iyzipay-php'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+  }
+
+  return $requirements;
+}

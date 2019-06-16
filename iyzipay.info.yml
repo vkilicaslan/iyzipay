@@ -1,0 +1,8 @@
+name: 'iyzipay'
+type: module
+description: 'Iyzico iyzipay credit card payment module for drupal commerce'
+core: 8.x
+package: 'commerce'
+dependencies:
+  - commerce:commerce_payment
+  - encryption
