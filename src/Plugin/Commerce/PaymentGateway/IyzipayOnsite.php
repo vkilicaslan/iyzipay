@@ -313,11 +313,16 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
     $price = $payment->getAmount()->getNumber();
     $curreny_code = $payment->getAmount()->getcurrencyCode();
 
+    $options = new Options();
+    $options->setApiKey($this->configuration['api_key']);
+    $options->setSecretKey($this->configuration['secret_key']);
+    $options->setBaseUrl($this->configuration['api_url']);
+
     $request = new CreateRefundRequest();
     $request->setPaymentTransactionId($remote_id);
     $request->setPrice($price);
     $request->setCurrency($curreny_code);
-    $refund = Refund::create($request, Config::options());
+    $refund = Refund::create($request, $options);
 
     if ($refund->getStatus() == "success") {
       $payment->setState('authorization_voided');
@@ -339,11 +344,16 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
     $price = $payment->getAmount()->getNumber();
     $curreny_code = $payment->getAmount()->getcurrencyCode();
 
+    $options = new Options();
+    $options->setApiKey($this->configuration['api_key']);
+    $options->setSecretKey($this->configuration['secret_key']);
+    $options->setBaseUrl($this->configuration['api_url']);
+
     $request = new CreateRefundRequest();
     $request->setPaymentTransactionId($remote_id);
     $request->setPrice($price);
     $request->setCurrency($curreny_code);
-    $response = Refund::create($request, Config::options());
+    $refund = Refund::create($request, $options);
 
     if ($response->getStatus() == 'success') {
       $old_refunded_amount = $payment->getRefundedAmount();
