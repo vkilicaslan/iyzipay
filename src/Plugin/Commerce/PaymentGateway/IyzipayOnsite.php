@@ -353,7 +353,7 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
     $request->setPaymentTransactionId($remote_id);
     $request->setPrice($price);
     $request->setCurrency($curreny_code);
-    $refund = Refund::create($request, $options);
+    $response = Refund::create($request, $options);
 
     if ($response->getStatus() == 'success') {
       $old_refunded_amount = $payment->getRefundedAmount();
