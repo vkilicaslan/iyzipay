@@ -9,11 +9,40 @@ use Iyzipay\Request\CreateThreedsPaymentRequest;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Drupal\Core\Entity\Query\QueryFactory;
+use Drupal\Core\Entity\EntityTypeManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This is a controller for 3D secure payment.
  */
 class RedirectController extends ControllerBase {
+
+  /**
+   * Drupal\Core\Entity\Query\QueryFactory definition.
+   *
+   * @var Drupal\Core\Entity\Query\QueryFactory
+   */
+  protected $entityQuery;
+  protected $entityTypeManager;
+
+  /**
+   * Dependency injection for entity query and entity type manager.
+   */
+  public function __construct(QueryFactory $entityQuery, EntityTypeManager $entityTypeManager) {
+    $this->entityQuery = $entityQuery;
+    $this->entityTypeManager = $entityTypeManager;
+  }
+
+  /**
+   * Return the services for entity query and entity type manager.
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('entity.query'),
+      $container->get('entity_type.manager')
+    );
+  }
 
   /**
    * Get proper return status from the 3D secure page.
@@ -27,7 +56,7 @@ class RedirectController extends ControllerBase {
     $conversationId = $request->request->get('conversationId');
     $mdStatus = $request->request->get('mdStatus');
 
-    $query = \Drupal::entityQuery('commerce_payment');
+    $query = $this->entityQuery->get('commerce_payment');
     $query->condition('order_id', $conversationId);
     $query->condition('payment_gateway', 'iyzipay');
     $payment_ids = $query->execute();
@@ -39,7 +68,7 @@ class RedirectController extends ControllerBase {
     $message_status = "error";
 
     if (!empty($query) && $status == "success") {
-      $payments = \Drupal::entityTypeManager()
+      $payments = $this->entityTypeManager
         ->getStorage('commerce_payment')
         ->loadMultiple($payment_ids);
 
@@ -61,7 +90,6 @@ class RedirectController extends ControllerBase {
             $options->setBaseUrl($configs['api_url']);
 
             $threedsPayment = ThreedsPayment::create($request, $options);
-
             // By sending the latest request to the gateway,
             // we should be making the payment.
             $status_3d = $threedsPayment->getStatus();
@@ -70,17 +98,16 @@ class RedirectController extends ControllerBase {
               $order_status = "completed";
               $message = "Your transaction is successful!";
               $message_status = "success";
-              $query = \Drupal::entityQuery('commerce_order');
+              $query = $this->entityQuery->get('commerce_order');
               $query->condition('order_id', $conversationId);
               $order_ids = $query->execute();
 
-              $orders = \Drupal::entityTypeManager()
+              $orders = $this->entityTypeManager
                 ->getStorage('commerce_order')
                 ->loadMultiple($order_ids);
 
               foreach ($orders as $order) {
                 $order->setOrderNumber($conversationId);
-                // $order->setState('completed');.
                 $order->unlock();
                 $order->state = "completed";
                 $order->cart = 0;
@@ -90,7 +117,6 @@ class RedirectController extends ControllerBase {
               }
             }
           }
-
           $payment->setRemoteId($paymentId);
           $payment->setState($order_status);
           $payment->save();
@@ -99,11 +125,11 @@ class RedirectController extends ControllerBase {
 
           // Lets find the product id so we can redirect user to the product
           // that they just bought.
-          $query = \Drupal::entityQuery('commerce_order_item');
+          $query = $this->entityQuery->get('commerce_order_item');
           $query->condition('order_id', $conversationId);
           $order_ids = $query->execute();
 
-          $order_items = \Drupal::entityTypeManager()
+          $order_items = $this->entityTypeManager
             ->getStorage('commerce_order_item')
             ->loadMultiple($order_ids);
 

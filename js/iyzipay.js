@@ -12,7 +12,9 @@
             Drupal.behaviors.iyzipayFancyCard.setupCard();
           }
           else {
-            setTimeout('Drupal.behaviors.iyzipayFancyCard.setupCard();', 1000);
+            $(document).ajaxStop(function() {
+              Drupal.behaviors.iyzipayFancyCard.setupCard();
+            });
           }
         });
       });
