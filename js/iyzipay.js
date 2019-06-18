@@ -8,14 +8,9 @@
         }
 
         $('.payment-method--new').one('click', function () {
-          if ($('input#edit-payment-information-add-payment-method-payment-details-number').length) {
+          $(document).ajaxStop(function () {
             Drupal.behaviors.iyzipayFancyCard.setupCard();
-          }
-          else {
-            $(document).ajaxStop(function() {
-              Drupal.behaviors.iyzipayFancyCard.setupCard();
-            });
-          }
+          });
         });
       });
     },

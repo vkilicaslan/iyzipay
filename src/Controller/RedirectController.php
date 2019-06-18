@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  * This is a controller for 3D secure payment.
@@ -25,11 +26,12 @@ class RedirectController extends ControllerBase {
    */
   protected $entityQuery;
   protected $entityTypeManager;
+  protected $messenger;
 
   /**
    * Dependency injection for entity query and entity type manager.
    */
-  public function __construct(QueryFactory $entityQuery, EntityTypeManager $entityTypeManager) {
+  public function __construct(QueryFactory $entityQuery, EntityTypeManager $entityTypeManager, MessengerInterface $messenger) {
     $this->entityQuery = $entityQuery;
     $this->entityTypeManager = $entityTypeManager;
   }
@@ -40,7 +42,8 @@ class RedirectController extends ControllerBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity.query'),
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('messenger')
     );
   }
 
@@ -121,7 +124,7 @@ class RedirectController extends ControllerBase {
           $payment->setState($order_status);
           $payment->save();
 
-          \Drupal::messenger()->addMessage($this->t($message), $message_status);
+          $this->messenger->addMessage($this->t($message), $message_status);
 
           // Lets find the product id so we can redirect user to the product
           // that they just bought.
@@ -144,7 +147,7 @@ class RedirectController extends ControllerBase {
 
     if (!$return_product) {
       $message = "Something went wrong";
-      \Drupal::messenger()->addMessage($this->t($message), 'error');
+      $this->messenger->addMessage($this->t($message), 'error');
       return new TrustedRedirectResponse('/');
     }
     else {
