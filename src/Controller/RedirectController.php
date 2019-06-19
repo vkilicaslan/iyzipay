@@ -66,7 +66,7 @@ class RedirectController extends ControllerBase {
 
     $return_product = 0;
 
-    $message = $this->("Your transaction has failed");
+    $message = $this->t("Your transaction has failed");
     $order_status = "failed";
     $message_status = "error";
 
