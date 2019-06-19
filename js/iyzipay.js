@@ -10,7 +10,7 @@
       if (typeof Card === 'undefined') {
         setTimeout(() => {Drupal.behaviors.iyzipayFancyCard.cardLibraryControl();}, 100);
       }
-	    else {
+      else {
         Drupal.behaviors.iyzipayFancyCard.setupCard();
       }
     },
