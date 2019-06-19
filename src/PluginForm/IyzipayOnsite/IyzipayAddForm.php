@@ -44,7 +44,7 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
     $payment_method = $this->entity;
-
+    $form['#attached']['library'][] = 'iyzipay/card';
     $form['#attached']['library'][] = 'commerce_payment/payment_method_form';
     $form['#tree'] = TRUE;
     $form['payment_details'] = [
@@ -134,7 +134,6 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
   protected function buildCreditCardForm(array $element, FormStateInterface $form_state) {
     $element['#attributes']['class'][] = 'credit-card-form';
     // Placeholder for the detected card type. Set by validateCreditCardForm().
-    $element['#attached']['library'][] = 'iyzipay/card';
     $element['#attached']['library'][] = 'iyzipay/iyzipay';
     $element['holder_name'] = [
       '#type' => 'textfield',

@@ -23,12 +23,8 @@ use Drupal\commerce_payment\Entity\PaymentInterface;
 use Drupal\commerce_payment\Entity\PaymentMethodInterface;
 use Drupal\commerce_payment\Exception\HardDeclineException;
 use Drupal\commerce_payment\Exception\PaymentGatewayException;
-use Drupal\commerce_payment\PaymentMethodTypeManager;
-use Drupal\commerce_payment\PaymentTypeManager;
 use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\OnsitePaymentGatewayBase;
 use Drupal\commerce_price\Price;
-use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Iyzipay\Request;
 use Iyzipay\Options;
@@ -48,17 +44,10 @@ use GuzzleHttp\Exception\RequestException;
  *   credit_card_types = {
  *     "amex", "mastercard", "visa", "troy", "visa electron",
  *   },
- *   js_library = "iyzipay/iyzipay",
+ *   js_library = "iyzipay/card",
  * )
  */
 class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInterface {
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, PaymentTypeManager $payment_type_manager, PaymentMethodTypeManager $payment_method_type_manager, TimeInterface $time) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $payment_type_manager, $payment_method_type_manager, $time);
-  }
 
   /**
    * {@inheritdoc}
@@ -128,12 +117,12 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
 
     if ($response->getStatus() != 'success') {
       \Drupal::logger('iyzipay')->error($message);
-      \Drupal::messenger()->addMessage($this->t($message), 'error');
+      \Drupal::messenger()->addMessage($this->t('The payment has failed'), 'error');
       throw new PaymentGatewayException($message);
     }
 
     if (!empty($response->getErrorCode())) {
-      \Drupal::messenger()->addMessage($this->t($message), 'error');
+      \Drupal::messenger()->addMessage($this->t('The payment has failed'), 'error');
       throw new HardDeclineException($message);
     }
 

@@ -66,7 +66,7 @@ class RedirectController extends ControllerBase {
 
     $return_product = 0;
 
-    $message = "Your transaction has failed";
+    $message = $this->("Your transaction has failed");
     $order_status = "failed";
     $message_status = "error";
 
@@ -99,7 +99,7 @@ class RedirectController extends ControllerBase {
 
             if ($status_3d == "success") {
               $order_status = "completed";
-              $message = "Your transaction is successful!";
+              $message = $this->t("Your transaction is successful!");
               $message_status = "success";
               $query = $this->entityQuery->get('commerce_order');
               $query->condition('order_id', $conversationId);
@@ -124,7 +124,7 @@ class RedirectController extends ControllerBase {
           $payment->setState($order_status);
           $payment->save();
 
-          $this->messenger->addMessage($this->t($message), $message_status);
+          $this->messenger->addMessage($message, $message_status);
 
           // Lets find the product id so we can redirect user to the product
           // that they just bought.
@@ -146,8 +146,7 @@ class RedirectController extends ControllerBase {
     }
 
     if (!$return_product) {
-      $message = "Something went wrong";
-      $this->messenger->addMessage($this->t($message), 'error');
+      $this->messenger->addMessage($this->t('Something went wrong'), 'error');
       return new TrustedRedirectResponse('/');
     }
     else {
