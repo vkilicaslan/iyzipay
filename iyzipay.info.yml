@@ -1,4 +1,4 @@
-name: 'iyzipay'
+name: 'Commerce Iyzipay Payment Gateway'
 type: module
 description: 'Iyzico iyzipay credit card payment module for drupal commerce'
 core: 8.x
