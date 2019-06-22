@@ -17,7 +17,7 @@ class LoadTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['encryption','commerce_payment','iyzipay'];
+  public static $modules = ['encryption', 'commerce_payment', 'iyzipay'];
 
   /**
    * A user with permission to administer site configuration.
