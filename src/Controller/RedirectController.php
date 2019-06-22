@@ -34,6 +34,7 @@ class RedirectController extends ControllerBase {
   public function __construct(QueryFactory $entityQuery, EntityTypeManager $entityTypeManager, MessengerInterface $messenger) {
     $this->entityQuery = $entityQuery;
     $this->entityTypeManager = $entityTypeManager;
+    $this->messenger = $messenger;
   }
 
   /**
