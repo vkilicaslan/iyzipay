@@ -18,6 +18,6 @@ card:
     url: https://github.com/jessepollak/card/blob/master/LICENSE
     gpl-compatible: true
   css:
-    "https://rawgit.com/jessepollak/card/master/dist/card.css": { minified: true }
+    "https://cdn.jsdelivr.net/gh/jessepollak/card@master/dist/card.css": { minified: true }
   js:
-    "https://rawgit.com/jessepollak/card/master/dist/card.js": { minified: true }
+    "https://cdn.jsdelivr.net/gh/jessepollak/card@master/dist/card.js": { minified: true }
