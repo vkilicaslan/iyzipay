@@ -209,7 +209,7 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
     $request->setPaidPrice($price);
 
     $request->setCurrency($curreny_code);
-    $request->setInstallment(1);
+    $request->setInstallment($order->field_number_of_installments->value);
     $request->setBasketId($order->id());
     $request->setPaymentChannel(PaymentChannel::WEB);
     $request->setPaymentGroup(PaymentGroup::PRODUCT);

@@ -7,6 +7,7 @@ use Drupal\commerce_payment\PluginForm\PaymentGatewayFormBase;
 use Drupal\commerce_payment\Exception\DeclineException;
 use Drupal\commerce_payment\Exception\PaymentGatewayException;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\profile\Entity\Profile;
 
@@ -24,8 +25,10 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
    */
   protected $routeMatch;
 
+
   /**
    * Constructs a new PaymentMethodAddForm.
+   *
    */
   public function __construct() {
     $this->routeMatch = \Drupal::service('current_route_match');
@@ -96,7 +99,7 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
     /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
     $payment_method = $this->entity;
 
-    $this->submitCreditCardForm($form['payment_details'], $form_state);
+    $this->submitCreditCardForm($form['payment_details'], $form_state, $order);
 
     /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
     $payment_method = $this->entity;
@@ -183,6 +186,11 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
       '#maxlength' => 4,
       '#size' => 4,
     ];
+    $element['number_of_installments'] = [
+      '#type' => 'select',
+      '#title' => t('Number of installments'),
+      '#options' => [1 => t('1'), 2 => t('2'), 3 => t('3'), 6 => t('6'), 9 => t('9'), 12 => t('12')],
+    ];
 
     return $element;
   }
@@ -243,8 +251,10 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
    *   The credit card form element.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the complete form.
+   * @param $order
    */
-  protected function submitCreditCardForm(array $element, FormStateInterface $form_state) {
+  protected function submitCreditCardForm(array $element, FormStateInterface $form_state, $order) {
+    $order = $this->routeMatch->getParameter('commerce_order');
     $values = $form_state->getValue($element['#parents']);
     $this->entity->encrypted_full_holder_name = $values['holder_name'];
     $this->entity->encrypted_full_card_type = $values['type'];
@@ -252,6 +262,7 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
     $this->entity->encrypted_full_card_exp_month = $values['expiration']['month'];
     $this->entity->encrypted_full_card_exp_year = $values['expiration']['year'];
     $this->entity->encrypted_full_card_cvv = $values['security_code'];
+    $order->field_number_of_installments->value = $values['number_of_installments'];
   }
 
 }
