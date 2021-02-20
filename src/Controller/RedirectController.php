@@ -13,6 +13,7 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\commerce_payment\Entity\Payment;
 
 /**
  * This is a controller for 3D secure payment.
@@ -148,10 +149,21 @@ class RedirectController extends ControllerBase {
 
     if (!$return_product) {
       $this->messenger->addMessage($this->t('Something went wrong'), 'error');
+      /*// Delete the last payment method local entity.
+      $payments = Payment::loadMultiple();
+      $last_payment = end($payments);
+      $payment_method = $last_payment->getPaymentMethod();
+      $payment_method->delete();*/
       return new TrustedRedirectResponse('/');
     }
     else {
-      return new TrustedRedirectResponse('/product/' . $return_product);
+      $this->messenger->addMessage($this->t('Your payment was successfully received.'));
+      // Delete the last payment method local entity.
+      $payment = Payment::loadMultiple();
+      $last_payment = end($payment);
+      $payment_method = $last_payment->getPaymentMethod();
+      $payment_method->delete();
+      return new TrustedRedirectResponse('/user/');
     }
   }
 
