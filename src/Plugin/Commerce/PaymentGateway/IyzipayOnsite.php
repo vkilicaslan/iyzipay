@@ -176,9 +176,9 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
     $binRequest = new RetrieveInstallmentInfoRequest();
     $binRequest->setLocale(Locale::TR);
     $binRequest->setConversationId($order->id());
-    // $binRequest->setBinNumber(substr($encryption_service->decrypt($payment_method->encrypted_full_card_number->value),0,6));.
+    $binRequest->setBinNumber(substr($encryption_service->decrypt($payment_method->encrypted_full_card_number->value),0,6));
     $binRequest->setPrice($payment->getAmount()->getNumber());
-    $binRequest->setBinNumber("447505");
+    //$binRequest->setBinNumber("447505");
     $installmentInfo = InstallmentInfo::retrieve($binRequest, $options);
 
     $price = $payment->getAmount()->getNumber();
@@ -209,7 +209,19 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
     $request->setPaidPrice($price);
 
     $request->setCurrency($curreny_code);
-    $request->setInstallment($order->field_number_of_installments->value);
+    /*
+    Setting number of installments upon the card type.
+    */
+    $cardType = $installmentInfo->getInstallmentDetails()[0]->getCardType();
+    if (!str_contains($cardType, 'CREDIT')) {
+      $request->setInstallment(1);
+      $order->field_number_of_installments->value = 1;
+      $order->save();
+    }
+    else {
+      $request->setInstallment($order->field_number_of_installments->value);
+    }
+    //$request->setInstallment($order->field_number_of_installments->value);
     $request->setBasketId($order->id());
     $request->setPaymentChannel(PaymentChannel::WEB);
     $request->setPaymentGroup(PaymentGroup::PRODUCT);
@@ -274,7 +286,6 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
     // See if it's forcing 3Dsecure. Well I tried this,
     // it seems to be working mostly
     // but it does not create the order for some reason.
-    if ($installmentInfo->getInstallmentDetails()[0]->getForce3ds()) {
       $host = \Drupal::request()->getSchemeAndHttpHost();
       $request->setCallbackUrl($host . "/iyzipay/3d_landing_page");
       $threedsInitialize = ThreedsInitialize::create($request, $options);
@@ -286,7 +297,6 @@ class IyzipayOnsite extends OnsitePaymentGatewayBase implements IyzipayOnsiteInt
       $payment->save();
 
       print $d_html;exit;
-    }
 
     $result = Payment::create($request, $options);
 

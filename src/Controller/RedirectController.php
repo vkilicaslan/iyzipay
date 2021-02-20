@@ -149,11 +149,11 @@ class RedirectController extends ControllerBase {
 
     if (!$return_product) {
       $this->messenger->addMessage($this->t('Something went wrong'), 'error');
-      /*// Delete the last payment method local entity.
+      // Delete the last payment method local entity.
       $payments = Payment::loadMultiple();
       $last_payment = end($payments);
       $payment_method = $last_payment->getPaymentMethod();
-      $payment_method->delete();*/
+      $payment_method->delete();
       return new TrustedRedirectResponse('/');
     }
     else {

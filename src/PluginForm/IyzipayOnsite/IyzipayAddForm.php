@@ -190,6 +190,7 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
     $element['number_of_installments'] = [
       '#type' => 'select',
       '#title' => t('Number of installments'),
+      '#description' => t('If you use a debit card to make your payment, number of installments will automatically be assigned as "1".'),
       '#options' => [1 => t('1'), 2 => t('2'), 3 => t('3'), 6 => t('6'), 9 => t('9'), 12 => t('12')],
     ];
 
