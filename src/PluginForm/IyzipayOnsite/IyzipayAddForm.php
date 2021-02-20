@@ -98,6 +98,7 @@ class IyzipayAddForm extends PaymentGatewayFormBase {
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
     $payment_method = $this->entity;
+    $order = $this->routeMatch->getParameter('commerce_order');
 
     $this->submitCreditCardForm($form['payment_details'], $form_state, $order);
 
