@@ -78,4 +78,4 @@ Try a few credit cards to see if the gateway is working properly.
 
 **This payment gateway requires cURL and OpenSSL.**
 
-NOTE: This module was created ny Bekir Dag, modified by Tolga Ozses and Volkan Kilicaslan.
+NOTE: This module was created by Bekir Dag, modified by Tolga Ozses and Volkan Kilicaslan.
